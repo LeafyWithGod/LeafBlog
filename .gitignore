@@ -1,0 +1,4 @@
+# 项目排除路径
+/blog-admin/target/
+/blog-framework/target/
+/blog-front/target/
