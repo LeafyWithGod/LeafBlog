@@ -18,5 +18,5 @@ import java.util.List;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
     User getUser(@Param("username") String username,@Param("status") String status);
-    List<UserDto> getUserName(@Param("ids") List<Long> id, @Param("status") String status);
+    List<UserDto> getNikeName(@Param("ids") List<Long> id, @Param("status") String status);
 }

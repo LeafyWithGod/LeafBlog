@@ -29,8 +29,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<UserDto> getUserName(List<Long> id, String status) {
-        return userMapper.getUserName(id,status);
+    public List<UserDto> getNikeName(List<Long> id, String status) {
+        return userMapper.getNikeName(id,status);
     }
 }
 

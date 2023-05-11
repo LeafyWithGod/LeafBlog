@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
     User getUser(String username,String status);
-    List<UserDto> getUserName(List<Long> id, String status);
+    List<UserDto> getNikeName(List<Long> id, String status);
 }
