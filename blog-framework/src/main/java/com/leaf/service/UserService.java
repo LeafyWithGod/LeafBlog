@@ -1,7 +1,10 @@
 package com.leaf.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leaf.domain.dto.UserDto;
 import com.leaf.domain.entity.User;
+
+import java.util.List;
 
 
 /**
@@ -11,5 +14,6 @@ import com.leaf.domain.entity.User;
  * @since 2023-05-08 17:00:37
  */
 public interface UserService extends IService<User> {
-
+    User getUser(String username,String status);
+    List<UserDto> getUserName(List<Long> id, String status);
 }

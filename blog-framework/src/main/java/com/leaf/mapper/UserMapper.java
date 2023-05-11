@@ -1,9 +1,12 @@
 package com.leaf.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.leaf.domain.dto.UserDto;
 import com.leaf.domain.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 /**
@@ -15,4 +18,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
     User getUser(@Param("username") String username,@Param("status") String status);
+    List<UserDto> getUserName(@Param("ids") List<Long> id, @Param("status") String status);
 }

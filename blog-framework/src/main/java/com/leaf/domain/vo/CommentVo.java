@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class CommentVo {
     private Long id;
+    private String username;
     //文章id
     private Long articleId;
     //根评论id
@@ -24,6 +25,5 @@ public class CommentVo {
     private Long toCommentId;
     private Long createBy;
     private Date createTime;
-    private String username;
 }
 
