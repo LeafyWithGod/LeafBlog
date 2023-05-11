@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -29,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public List<UserDto> getNikeName(List<Long> id, String status) {
+    public List<UserDto> getNikeName(Set<Long> id, String status) {
         return userMapper.getNikeName(id,status);
     }
 }

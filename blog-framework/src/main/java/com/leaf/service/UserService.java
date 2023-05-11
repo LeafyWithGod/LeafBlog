@@ -5,6 +5,7 @@ import com.leaf.domain.dto.UserDto;
 import com.leaf.domain.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
     User getUser(String username,String status);
-    List<UserDto> getNikeName(List<Long> id, String status);
+    List<UserDto> getNikeName(Set<Long> id, String status);
 }

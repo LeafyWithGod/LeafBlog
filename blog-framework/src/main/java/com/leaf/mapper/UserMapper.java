@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -18,5 +19,5 @@ import java.util.List;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
     User getUser(@Param("username") String username,@Param("status") String status);
-    List<UserDto> getNikeName(@Param("ids") List<Long> id, @Param("status") String status);
+    List<UserDto> getNikeName(@Param("ids") Set<Long> id, @Param("status") String status);
 }

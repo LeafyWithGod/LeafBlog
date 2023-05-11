@@ -1,7 +1,6 @@
 package com.leaf.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leaf.domain.dto.ChildrenCommentId;
 import com.leaf.domain.entity.Comment;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +22,5 @@ public interface CommentMapper extends BaseMapper<Comment> {
             ,@Param("pageSize") Integer pageSize);
 
     List<Comment> getSonCommentList(@Param("ids") List<Long> ids);
+
 }

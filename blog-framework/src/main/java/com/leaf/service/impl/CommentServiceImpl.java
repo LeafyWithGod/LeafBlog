@@ -3,7 +3,6 @@ package com.leaf.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leaf.constants.ResultStatus;
 import com.leaf.domain.ResponseResult;
-import com.leaf.domain.dto.ChildrenCommentId;
 import com.leaf.domain.dto.UserDto;
 import com.leaf.domain.entity.Comment;
 import com.leaf.domain.vo.CommentVo;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -32,13 +30,33 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     private UserService userService;
 
+    /**
+     * 查询评论
+     * @param articleId 文章id
+     * @param pageNum  页码
+     * @param pageSize 每页多少文章
+     * @return
+     */
     @Override
     public ResponseResult getCommentList(Long articleId, Integer pageNum, Integer pageSize) {
         //查询根评论
-        List<Comment> commentList = commentMapper.getCommentList(articleId ,-1L , pageNum, pageSize);
+        List<Comment> commentList = commentMapper.getCommentList(articleId ,-1L , (pageNum - 1) * pageSize, pageSize);
+        //封装父评论
         List<CommentVo> commentVoList = toCommentVoList(commentList);
+        //查询子评论
         List<CommentVo> commentVoChildrenList=getChildren(commentVoList);
-        return ResponseResult.okResult(new PageVo(commentVoChildrenList,new Long(commentList.size())));
+        return ResponseResult.okResult(new PageVo(commentVoChildrenList, (long)commentVoChildrenList.size()));
+    }
+
+    /**
+     * 添加文章
+     * @param comment 要添加的文章
+     * @return
+     */
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        boolean save = save(comment);
+        return ResponseResult.okResult(save);
     }
 
     /**
@@ -78,8 +96,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private List<CommentVo> toCommentVoList(List<Comment> list){
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         //收集评论人id和所回复的目标评论id
-        List<Long> createBys=new ArrayList<>();
-        List<Long> toCommentUserIds=new ArrayList<>();
+        Set<Long> createBys=new HashSet<>();
+        Set<Long> toCommentUserIds=new HashSet<>();
         for (CommentVo commentVo:commentVos){
             createBys.add(commentVo.getCreateBy());
             toCommentUserIds.add(commentVo.getToCommentUserId());

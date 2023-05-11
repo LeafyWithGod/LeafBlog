@@ -1,6 +1,7 @@
 package com.leaf.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leaf.constants.ResultStatus;
 import com.leaf.domain.ResponseResult;
 import com.leaf.domain.entity.Article;
 import com.leaf.domain.vo.*;
@@ -8,12 +9,12 @@ import com.leaf.mapper.ArticleMapper;
 import com.leaf.mapper.CategoryMapper;
 import com.leaf.service.ArticleService;
 import com.leaf.utils.BeanCopyUtils;
-import com.leaf.constants.ResultStatus;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,7 +74,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
             return articleListVo;
         }).collect(Collectors.toList());
         //封装返回
-        PageVo pageVo = new PageVo(articleListVos, new Long(articleListVos.size()));
+        PageVo pageVo = new PageVo(articleListVos, (long)articleListVos.size());
         return ResponseResult.okResult(pageVo);
     }
 
