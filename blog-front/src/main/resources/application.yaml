@@ -33,3 +33,8 @@ jwt:
 
 redis:
   redisLogin: blogLogin
+
+oss:
+  aKey: Xgu6nMtLr_aiS8asK3wwQI54Ao8ti0t33eDdYDzZ
+  sKey: Ue7c9rd3NYMceobffTgPQX_ChPmoFQPsYewui71F
+  bucket: leaf-blog
