@@ -20,4 +20,6 @@ import java.util.Set;
 public interface UserMapper extends BaseMapper<User> {
     User getUser(@Param("username") String username,@Param("status") String status);
     List<UserDto> getNikeName(@Param("ids") Set<Long> id, @Param("status") String status);
+
+    User getLoginUser(@Param("id") Long userId);
 }

@@ -207,7 +207,7 @@
                     this.commentList = this.commentList.concat(msg);
                 }
                 
-                this.hasMore = result.total>this.commentList.length
+                this.hasMore = result.total==this.commentList.length
               },
           //选择表情包
           choseEmoji:function(inner){

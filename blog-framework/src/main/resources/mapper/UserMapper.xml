@@ -44,10 +44,15 @@
         from sys_user
         where status=#{status}
         and
-        (id in
+        id in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id,jdbcType=BIGINT}
-        </foreach>)
+        </foreach>
+    </select>
+
+    <select id="getLoginUser" resultType="com.leaf.domain.entity.User" resultMap="BaseResultMap">
+        <include refid="select*"/>
+        from sys_user  where id=#{id,jdbcType=BIGINT}
     </select>
 
 

@@ -19,8 +19,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
     List<Comment> getCommentList(@Param("articleId") Long articleId
             ,@Param("rootId") Long rootId
             ,@Param("pageNum") Integer pageNum
-            ,@Param("pageSize") Integer pageSize);
+            ,@Param("pageSize") Integer pageSize
+            ,@Param("type") String type);
 
-    List<Comment> getSonCommentList(@Param("ids") List<Long> ids);
-
+    List<Comment> getSonCommentList(@Param("ids") List<Long> ids,@Param("type") String type);
 }

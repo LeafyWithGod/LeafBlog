@@ -13,7 +13,8 @@ import com.leaf.domain.entity.Comment;
  */
 public interface CommentService extends IService<Comment> {
 
-    ResponseResult getCommentList(Long articleId, Integer pageNum, Integer pageSize);
+    ResponseResult getCommentList(Long articleId, Integer pageNum, Integer pageSize,String type);
 
     ResponseResult addComment(Comment comment);
+
 }

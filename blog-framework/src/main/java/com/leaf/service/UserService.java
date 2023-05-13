@@ -1,6 +1,7 @@
 package com.leaf.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leaf.domain.ResponseResult;
 import com.leaf.domain.dto.UserDto;
 import com.leaf.domain.entity.User;
 
@@ -17,4 +18,6 @@ import java.util.Set;
 public interface UserService extends IService<User> {
     User getUser(String username,String status);
     List<UserDto> getNikeName(Set<Long> id, String status);
+
+    ResponseResult getLoginUser();
 }

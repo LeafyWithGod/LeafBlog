@@ -38,19 +38,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      * @return
      */
     @Override
-    public ResponseResult getCommentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult getCommentList(Long articleId, Integer pageNum, Integer pageSize,String type) {
         //查询根评论
-        List<Comment> commentList = commentMapper.getCommentList(articleId ,-1L , (pageNum - 1) * pageSize, pageSize);
+        List<Comment> commentList = commentMapper.getCommentList(articleId ,-1L , (pageNum - 1) * pageSize, pageSize,type);
+        if (commentList.isEmpty())
+            return ResponseResult.okResult(new PageVo(null,null));
         //封装父评论
         List<CommentVo> commentVoList = toCommentVoList(commentList);
         //查询子评论
-        List<CommentVo> commentVoChildrenList=getChildren(commentVoList);
+        List<CommentVo> commentVoChildrenList=getChildren(commentVoList,type);
         return ResponseResult.okResult(new PageVo(commentVoChildrenList, (long)commentVoChildrenList.size()));
     }
 
     /**
-     * 添加文章
-     * @param comment 要添加的文章
+     * 添加评论
+     * @param comment 要添加的评论
      * @return
      */
     @Override
@@ -64,14 +66,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      * @param commentVoList
      * @return
      */
-    private List<CommentVo> getChildren(List<CommentVo> commentVoList) {
+    private List<CommentVo> getChildren(List<CommentVo> commentVoList,String type) {
         List<Long> ids=new ArrayList<>();
         //获取父评论的id
         for (CommentVo commentVo:commentVoList){
             ids.add(commentVo.getId());
         }
         //查询id对应的子评论
-        List<Comment> sonCommentList = commentMapper.getSonCommentList(ids);
+        List<Comment> sonCommentList = commentMapper.getSonCommentList(ids,type);
+        if (sonCommentList.isEmpty())
+            return commentVoList;
         List<CommentVo> sonCommentVos = toCommentVoList(sonCommentList);
         //遍历父评论
         for (CommentVo commentVo:commentVoList){

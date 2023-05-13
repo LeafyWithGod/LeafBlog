@@ -3,7 +3,7 @@ package com.leaf.service.impl;
 import com.leaf.constants.ResultStatus;
 import com.leaf.domain.dto.LoginUser;
 import com.leaf.domain.entity.User;
-import com.leaf.mapper.UserMapper;
+import com.leaf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,14 +11,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @return
      */
     private UserDetails getUser(String username) {
-        User user = userMapper.getUser(username, ResultStatus.UserZero);
+        User user = userService.getUser(username, ResultStatus.UserZero);
         if(Objects.isNull(user)){
             throw new RuntimeException("用户不存在");
         }
