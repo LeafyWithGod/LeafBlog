@@ -1,5 +1,6 @@
 package com.leaf.controller;
 
+import com.leaf.annotation.SystemLog;
 import com.leaf.domain.ResponseResult;
 import com.leaf.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/articleList")
+    @SystemLog(businessName = "获取文章简洁信息")
     public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId) {
         return articleService.articleList(pageNum,pageSize,categoryId);
     }

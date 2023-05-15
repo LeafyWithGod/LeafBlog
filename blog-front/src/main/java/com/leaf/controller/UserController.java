@@ -1,5 +1,6 @@
 package com.leaf.controller;
 
+import com.leaf.annotation.SystemLog;
 import com.leaf.domain.ResponseResult;
 import com.leaf.domain.entity.User;
 import com.leaf.service.UserService;
@@ -19,6 +20,7 @@ public class UserController {
     }
 
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     public ResponseResult updateUser(@RequestBody User user){
         return userService.updateUser(user);
     }
