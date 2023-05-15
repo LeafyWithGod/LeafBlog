@@ -20,4 +20,6 @@ public interface UserService extends IService<User> {
     List<UserDto> getNikeName(Set<Long> id, String status);
 
     ResponseResult getLoginUser();
+
+    ResponseResult updateUser(User user);
 }

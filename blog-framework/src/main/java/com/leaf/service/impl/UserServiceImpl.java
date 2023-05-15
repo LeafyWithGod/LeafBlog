@@ -38,12 +38,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.getNikeName(id,status);
     }
 
+    /**
+     * 获取用户信息
+     * @return
+     */
     @Override
     public ResponseResult getLoginUser() {
         Long userId = SecurityUtils.getUserId();
         User user=userMapper.getLoginUser(userId);
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
         return ResponseResult.okResult(userInfoVo);
+    }
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    @Override
+    public ResponseResult updateUser(User user) {
+        updateById(user);
+        return ResponseResult.okResult();
     }
 }
 

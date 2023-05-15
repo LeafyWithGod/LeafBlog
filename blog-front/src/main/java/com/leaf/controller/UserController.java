@@ -1,11 +1,10 @@
 package com.leaf.controller;
 
 import com.leaf.domain.ResponseResult;
+import com.leaf.domain.entity.User;
 import com.leaf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -18,4 +17,10 @@ public class UserController {
     public ResponseResult getUser(){
         return userService.getLoginUser();
     }
+
+    @PutMapping("userInfo")
+    public ResponseResult updateUser(@RequestBody User user){
+        return userService.updateUser(user);
+    }
+
 }
