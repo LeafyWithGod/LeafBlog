@@ -33,6 +33,7 @@ jwt:
 
 redis:
   redisLogin: blogLogin
+  HotArticle: article:ViewCount
 
 oss:
   aKey: Xgu6nMtLr_aiS8asK3wwQI54Ao8ti0t33eDdYDzZ

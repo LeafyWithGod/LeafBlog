@@ -23,4 +23,5 @@ public class HotArticleVo {
         this.title = article.getTitle();
         this.viewCount = article.getViewCount();
     }
+
 }

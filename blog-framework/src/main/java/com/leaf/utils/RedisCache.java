@@ -189,6 +189,13 @@ public class RedisCache
     }
 
     /**
+     * 对redis数据进行操作
+     */
+    public void incrementCacheMapValue(String key,String hKey,int v){
+        redisTemplate.opsForHash().increment(key,hKey,v);
+    }
+
+    /**
      * 获取Hash中的数据
      *
      * @param key Redis键

@@ -18,7 +18,12 @@
         <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+    </resultMap>
 
+    <resultMap id="HotArticle" type="com.leaf.domain.vo.HotArticleVo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="view_count" jdbcType="BIGINT" property="viewCount"/>
     </resultMap>
 
     <sql id="select*">
@@ -27,7 +32,7 @@
     </sql>
 
 
-    <select id="hotArticleList" resultType="com.leaf.domain.entity.Article">
+    <select id="hotArticleList" resultType="com.leaf.domain.entity.Article" resultMap="BaseResultMap">
         <include refid="select*"/>
         from leaf_article
         where
@@ -35,23 +40,30 @@
         order by view_count desc limit 10
     </select>
 
-    <select id="pageArticleList" resultType="com.leaf.domain.entity.Article">
+    <select id="pageArticleList" resultType="com.leaf.domain.entity.Article" resultMap="BaseResultMap">
         <include refid="select*"/>
         from leaf_article
         where
-        status='0' and del_flag=#{status}
+        del_flag='0' and status=#{status}
         <if test="categoryId>0">
             and category_id=#{categoryId}
         </if>
         order by is_top desc,view_count desc limit #{pageNum,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
     </select>
 
-    <select id="selectArticleOne" resultType="com.leaf.domain.entity.Article">
+    <select id="selectArticleOne" resultType="com.leaf.domain.entity.Article" resultMap="BaseResultMap">
         <include refid="select*"/>
         from leaf_article
         where
-        status='0' and del_flag=#{status}
+        status=#{status} and del_flag='0'
         and id=#{id}
+    </select>
+
+    <select id="selectHotArticleVo" resultType="com.leaf.domain.vo.HotArticleVo" resultMap="HotArticle">
+        select id,title,view_count
+        from leaf_article
+        where
+        status=#{status} and del_flag='0'
     </select>
 
 

@@ -2,6 +2,7 @@ package com.leaf.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leaf.domain.entity.Article;
+import com.leaf.domain.vo.HotArticleVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -19,4 +20,6 @@ public interface ArticleMapper extends BaseMapper<Article> {
     );
 
     Article selectArticleOne(@Param("id") Long id,@Param("status") String status);
+
+    List<HotArticleVo> selectHotArticleVo(@Param("status")String status);
 }

@@ -9,12 +9,15 @@ import com.leaf.mapper.ArticleMapper;
 import com.leaf.mapper.CategoryMapper;
 import com.leaf.service.ArticleService;
 import com.leaf.utils.BeanCopyUtils;
+import com.leaf.utils.RedisCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +29,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private RedisCache redisCache;
+
+    @Value("${redis.HotArticle}")
+    private String key;
+
     /**
      * 获取文章浏览量并选出前十排序
      * @return
@@ -33,12 +42,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
     @Override
     public ResponseResult hotArticleList() {
         List<Article> articleList=articleMapper.hotArticleList(ResultStatus.ArticleZero);
-        //使用stream流来进行数据封装操作
-//        List<HotArticleVo> hotArticleVos = articleList.stream().map(article -> {
-//            HotArticleVo hotArticleVo = new HotArticleVo(article);
-//            return hotArticleVo;
-//        }).collect(Collectors.toList());
-        //改用工具类
+        Map<String, Integer> Map = redisCache.getCacheMap(key);
+        for (Article article:articleList){
+            //把id转为String
+            String id = article.getId().toString();
+            article.setViewCount(Map.get(id).longValue());
+        }
+        //封装
         List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyBeanList(articleList, HotArticleVo.class);
         return ResponseResult.okResult(hotArticleVos);
     }
@@ -63,6 +73,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
         for(CategoryVo categoryVo:categoryListMap){
             categoryMap.put(categoryVo.getId(),categoryVo.getName());
         }
+        //对浏览量进行操作
+        Map<String, Integer> Map = redisCache.getCacheMap(key);
+        for (Article article:articles){
+            //把id转为String
+            String id = article.getId().toString();
+            article.setViewCount(Map.get(id).longValue());
+        }
         /**
          * 1.把Article对象封装成ArticleListVo对象
          * 2.封装的时候根据每个Article对象的categoryId去map里面获取categoryName
@@ -86,12 +103,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper,Article> imple
     @Override
     public ResponseResult selectArticleOne(Long id) {
         Article article=articleMapper.selectArticleOne(id,ResultStatus.ArticleZero);
+        //对浏览量进行操作
+        Map<String, Integer> Map = redisCache.getCacheMap(key);
+        String articleId = article.getId().toString();
+        article.setViewCount(Map.get(articleId).longValue());
+        //封装
         ArticleDetalVo articleDetalVo = BeanCopyUtils.copyBean(article, ArticleDetalVo.class);
         String categoryName = categoryMapper.getCategoryName(id,ResultStatus.CategoryZero);
         if (categoryName!=null&&categoryName!="") {
             articleDetalVo.setCategoryName(categoryName);
         }
         return ResponseResult.okResult(articleDetalVo);
+    }
+
+    /**
+     * 更新文章浏览量
+     * @param id
+     * @return
+     */
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue(key,id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+    /**
+     * 获取所有文章浏览量
+     * @return
+     */
+    @Override
+    public List<HotArticleVo> HotArticleVo() {
+        return articleMapper.selectHotArticleVo(ResultStatus.ArticleZero);
     }
 
 
