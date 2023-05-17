@@ -16,6 +16,9 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 5MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher #boot2.6以后版本使用swagger2需要加
 
 mybatis-plus:
   configuration:
