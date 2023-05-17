@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leaf.mapper.TagMapper">
+
+    <resultMap id="BaseResultMap" type="com.leaf.domain.entity.Tag">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="select*">
+        select id,name,create_by,create_time,update_by,update_time,del_flag,remark
+    </sql>
+
+    <select id="getList" resultType="com.leaf.domain.entity.Tag">
+        <include refid="select*"/>
+        from leaf_tag
+        where del_flag='0'
+    </select>
+</mapper>

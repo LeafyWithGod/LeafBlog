@@ -31,7 +31,7 @@ import java.util.Objects;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     //token头
-    @Value("${jwt.front.tokenHeader}")
+    @Value("${jwt.admin.tokenHeader}")
     private String tokenHeader;
     @Value("${redis.redisLogin}")
     private String blogLogin;
