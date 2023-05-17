@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,8 +29,11 @@ public class UpdateViewCountJob {
     @Autowired
     private RedisCache redisCache;
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void updateViewCount(){
+        SimpleDateFormat format = new SimpleDateFormat("yyy-mm-dd HH:mm:ss");
+        Date start = new Date(System.currentTimeMillis());
+        System.out.println(format.format(start)+" 定时任务开始执行");
         //获取redis中的map
         Map<String, Integer> Map = redisCache.getCacheMap(key);
         List<Article> collect = Map.entrySet()
@@ -37,5 +42,7 @@ public class UpdateViewCountJob {
                 .collect(Collectors.toList());
         //写入数据库
         articleService.updateBatchById(collect);
+        Date stop = new Date(System.currentTimeMillis());
+        System.out.println(format.format(stop)+" 定时任务执行完成");
     }
 }
