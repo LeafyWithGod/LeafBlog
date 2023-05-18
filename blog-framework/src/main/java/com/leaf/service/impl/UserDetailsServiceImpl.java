@@ -3,6 +3,7 @@ package com.leaf.service.impl;
 import com.leaf.constants.ResultStatus;
 import com.leaf.domain.dto.LoginUser;
 import com.leaf.domain.entity.User;
+import com.leaf.service.MenuService;
 import com.leaf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,12 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-
+    @Autowired
+    private MenuService menuService;
     @Autowired
     private UserService userService;
 
@@ -36,8 +39,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户不存在");
         }
         //TODO 查询权限信息
+        List<String> listMenu = menuService.getListMenu(user.getId());
         //封装用户信息
-        LoginUser loginUser=new LoginUser(user);
+        LoginUser loginUser=new LoginUser(user,listMenu);
         //TODO 封装权限信息
         return loginUser;
     }

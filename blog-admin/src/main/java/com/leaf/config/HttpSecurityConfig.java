@@ -37,7 +37,7 @@ public class HttpSecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
-//                .antMatchers("/login").anonymous()
+                .antMatchers("/user/login").anonymous()
 //                .antMatchers("/logout").authenticated()
 //                .antMatchers("/user/userInfo").authenticated()
 //                .antMatchers("/upload").authenticated()

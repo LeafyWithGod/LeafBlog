@@ -3,10 +3,7 @@ package com.leaf.service.impl;
 import com.leaf.domain.ResponseResult;
 import com.leaf.domain.dto.LoginUser;
 import com.leaf.domain.entity.User;
-import com.leaf.domain.vo.BlogUserLoginVo;
-import com.leaf.domain.vo.UserInfoVo;
-import com.leaf.service.BlogLoginService;
-import com.leaf.utils.BeanCopyUtils;
+import com.leaf.service.AdminLoginService;
 import com.leaf.utils.JwtUtil;
 import com.leaf.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class BlogLoginServiceImpl implements BlogLoginService {
-
+public class AdminLoginServiceImpl implements AdminLoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -36,7 +33,7 @@ public class BlogLoginServiceImpl implements BlogLoginService {
                 = new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
-        if(Objects.isNull(authenticate)){
+        if (Objects.isNull(authenticate)) {
             throw new RuntimeException("用户名或密码错误");
         }
         //获取username生成token
@@ -44,12 +41,11 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         String userName = principal.getUser().getUserName();
         String jwt = JwtUtil.createJWT(userName);
         //写入redis,60s*60一小时过期
-        redisCache.setCacheObject(this.blogLogin+userName,principal,60*60, TimeUnit.SECONDS);
-        //封装
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(principal.getUser(), UserInfoVo.class);
-        BlogUserLoginVo blogUserLoginVo = new BlogUserLoginVo(jwt, userInfoVo);
+        redisCache.setCacheObject(this.blogLogin + userName, principal, 60 * 60, TimeUnit.SECONDS);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("token", jwt);
         //返回
-        return ResponseResult.okResult(blogUserLoginVo);
+        return ResponseResult.okResult(map);
     }
 
     @Override
@@ -60,7 +56,8 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         //获取username
         String userName = principal.getUser().getUserName();
         //删除redis里面的角色
-        redisCache.deleteObject(this.blogLogin+userName);
+        redisCache.deleteObject(this.blogLogin + userName);
         return ResponseResult.okResult();
     }
 }
+

@@ -1,15 +1,15 @@
 package com.leaf.domain.dto;
 
 import com.leaf.domain.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +17,23 @@ public class LoginUser implements UserDetails {
 
     private User user;
 
+    private List<String> permissions;
+
     public LoginUser(User user) {
         this.user = user;
+        this.permissions=null;
+    }
 
+    public LoginUser(User user, List<String> permissions) {
+        this.user = user;
+        this.permissions = permissions;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return permissions.stream()
+                .map(p -> new SimpleGrantedAuthority(p))
+                .collect(Collectors.toList());
     }
 
     @Override
