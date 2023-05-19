@@ -29,7 +29,7 @@ mybatis-plus:
       id-type: auto
 jwt:
   admin:
-    tokenHeader: admin-token
+    tokenHeader: token
 
 redis:
   redisLogin: adminLogin

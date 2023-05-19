@@ -2,6 +2,7 @@ package com.leaf.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.leaf.domain.entity.Menu;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,5 +17,7 @@ import java.util.List;
 @Repository
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    List<String> getListMenu(Long id);
+    List<String> getListMenu(@Param("id") Long id,@Param("status") String status);
+
+    List<Menu> getAdmin(@Param("menu") String menu, @Param("button") String button, @Param("status") String status);
 }

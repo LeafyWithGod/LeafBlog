@@ -34,15 +34,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @return
      */
     private UserDetails getUser(String username) {
+        //查询用户信息
         User user = userService.getUser(username, ResultStatus.UserZero);
         if(Objects.isNull(user)){
             throw new RuntimeException("用户不存在");
         }
-        //TODO 查询权限信息
+        //查询权限信息
         List<String> listMenu = menuService.getListMenu(user.getId());
-        //封装用户信息
+        //封装用户&权限信息
         LoginUser loginUser=new LoginUser(user,listMenu);
-        //TODO 封装权限信息
         return loginUser;
     }
 }

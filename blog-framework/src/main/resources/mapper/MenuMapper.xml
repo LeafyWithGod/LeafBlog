@@ -2,6 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.leaf.mapper.MenuMapper">
 
+    <resultMap id="BaseResultMap" type="com.leaf.domain.entity.Menu">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="order_num" jdbcType="INTEGER" property="orderNum"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="is_frame" jdbcType="INTEGER" property="isFrame"/>
+        <result column="menu_type" jdbcType="CHAR" property="menuType"/>
+        <result column="visible" jdbcType="CHAR" property="visible"/>
+        <result column="perms" jdbcType="VARCHAR" property="perms"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="create_by" jdbcType="BIGINT" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="BIGINT" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="del_flag" jdbcType="INTEGER" property="delFlag"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="select*">
+        select id,menu_name,parent_id,order_num,path,component,is_frame,menu_type,visible
+             ,perms,icon,status,create_by,create_time,update_by,update_time,del_flag,remark
+    </sql>
 
     <select id="getListMenu" resultType="java.lang.String">
         select distinct m.perms
@@ -11,7 +36,17 @@
             left join sys_role_menu rm on ur.role_id=rm.role_id
             left join sys_menu m on m.id=rm.menu_id
         where user_id=#{id}
-            and r.status=0
-            and m.status=0
+            and r.status=#{status}
+            and m.status=#{status}
+    </select>
+
+    <select id="getAdmin" resultType="com.leaf.domain.entity.Menu">
+        <include refid="select*"/>
+        from sys_menu
+        where (menu_type in (#{menu},#{button}))
+        and
+        status=#{status}
+        and
+        del_flag='0'
     </select>
 </mapper>
