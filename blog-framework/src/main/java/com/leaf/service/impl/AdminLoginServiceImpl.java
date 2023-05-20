@@ -82,7 +82,7 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         //获取用户信息
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         //获取权限信息
-        List<String> listMenu = menuService.getListMenu(loginUser.getUser().getId());
+        List<String> listMenu = menuService.getMenuByid(loginUser.getUser().getId());
         //返回角色信息
         List<String> roles=roleService.selectRoleKeyById(loginUser.getUser().getId());
         //封装返回

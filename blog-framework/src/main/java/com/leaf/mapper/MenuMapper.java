@@ -17,7 +17,10 @@ import java.util.List;
 @Repository
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    List<String> getListMenu(@Param("id") Long id,@Param("status") String status);
+    List<String> getListPerms(@Param("id") Long id,@Param("status") String status);
 
     List<Menu> getAdmin(@Param("menu") String menu, @Param("button") String button, @Param("status") String status);
+
+    List<Menu> getListRouters(@Param("id") Long userId, @Param("status")String menuZero
+            ,@Param("menu") String menu, @Param("button")String button);
 }

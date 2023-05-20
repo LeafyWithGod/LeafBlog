@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户不存在");
         }
         //查询权限信息
-        List<String> listMenu = menuService.getListMenu(user.getId());
+        List<String> listMenu = menuService.getMenuByid(user.getId());
         //封装用户&权限信息
         LoginUser loginUser=new LoginUser(user,listMenu);
         return loginUser;

@@ -28,7 +28,7 @@
              ,perms,icon,status,create_by,create_time,update_by,update_time,del_flag,remark
     </sql>
 
-    <select id="getListMenu" resultType="java.lang.String">
+    <select id="getListPerms" resultType="java.lang.String">
         select distinct m.perms
             from
             sys_user_role ur
@@ -48,5 +48,20 @@
         status=#{status}
         and
         del_flag='0'
+    </select>
+
+    <select id="getListRouters" resultType="com.leaf.domain.entity.Menu">
+        select distinct
+            m.id,m.menu_name,m.parent_id,m.order_num,m.path,m.component,m.is_frame,m.menu_type,m.visible
+              ,m.perms,m.icon,m.status,m.create_by,m.create_time,m.update_by,m.update_time,m.del_flag,m.remark
+        from
+            sys_user_role ur
+                left join sys_role r on ur.role_id=r.id
+                left join sys_role_menu rm on ur.role_id=rm.role_id
+                left join sys_menu m on m.id=rm.menu_id
+        where user_id=#{id}
+          and r.status=#{status}
+          and m.status=#{status}
+          and (m.menu_type in (#{menu},#{button}))
     </select>
 </mapper>

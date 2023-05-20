@@ -1,6 +1,7 @@
 package com.leaf.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leaf.domain.ResponseResult;
 import com.leaf.domain.entity.Menu;
 
 import java.util.List;
@@ -14,5 +15,7 @@ import java.util.List;
  */
 public interface MenuService extends IService<Menu> {
 
-    List<String> getListMenu(Long id);
+    List<String> getMenuByid(Long id);
+
+    ResponseResult getListRouters();
 }
