@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +35,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public List<String> getMenuByid(Long id) {
-        if (SecurityUtils.isAdmin()){
+        if (id!=null&&id.equals(1L)){
             List<Menu> admin = menuMapper.getAdmin(ResultStatus.MENU, ResultStatus.BUTTON, ResultStatus.MenuZero);
-            List<String> perms = admin.stream().map(m -> m.getPerms()).collect(Collectors.toList());
-            return perms;
+            return admin.stream().map(Menu::getPerms).collect(Collectors.toList());
+
         }
         return menuMapper.getListPerms(id,ResultStatus.MenuZero);
     }
@@ -51,15 +50,18 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public ResponseResult getListRouters() {
         Long userId = SecurityUtils.getUserId();
-        List<Menu> menus = new ArrayList<Menu>();
+        //查询
+        List<Menu> menus;
         if (SecurityUtils.isAdmin()){
             menus=menuMapper.getAdmin(ResultStatus.MENU,ResultStatus.BUTTON,ResultStatus.MenuZero);
         }else {
             menus=menuMapper.getListRouters(userId, ResultStatus.MenuZero
                     , ResultStatus.MENU, ResultStatus.BUTTON);
         }
-//        List<MenusVo> menusVos=menusVoList(menus);
-        return null;
+        //封装
+        List<MenusVo> menusVos=menusVoList(menus);
+        //返回
+        return ResponseResult.okResult(menusVos);
     }
 
     /**
@@ -68,21 +70,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     public List<MenusVo> menusVoList(List<Menu> menus) {
-        Collections.sort(menus,(m1,m2)->{
-            return m2.getParentId().intValue()-m1.getParentId().intValue();
+        //排序
+        menus.sort((m1, m2) -> {
+            return m2.getParentId().intValue() - m1.getParentId().intValue();
         });
         List<MenusVo> menusVos = BeanCopyUtils.copyBeanList(menus, MenusVo.class);
-        ArrayList<MenusVo> menusVoArrayList = new ArrayList<>();
+        ArrayList<MenusVo> sonMenusVoList = new ArrayList<>();
+        //将子菜单封装进父菜单
         for (MenusVo fath:menusVos){
             List<MenusVo> chi = new ArrayList<>();
             for (MenusVo son:menusVos){
-                if (fath.getId()==son.getParentId()) {
+                if (fath.getId().equals(son.getParentId())) {
                     chi.add(son);
+                    sonMenusVoList.add(son);
                 }
             }
             fath.setChildren(chi);
         }
-        return menusVoArrayList;
+        //删除子菜单
+        for (MenusVo m:sonMenusVoList)
+            menusVos.remove(m);
+        return menusVos;
     }
 }
 
