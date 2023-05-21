@@ -1,5 +1,5 @@
-﻿import { constantRoutes } from '@/router'
-import { getRouters } from '@/api/menu'
+﻿import {constantRoutes} from '@/router'
+import {getRouters} from '@/api/menu'
 import Layout from '@/layout/index'
 import ParentView from '@/components/ParentView'
 import InnerLink from '@/layout/components/InnerLink'
@@ -95,7 +95,7 @@ function buildRouterTree(menus) {
       children.meta = getComponentMeta(menu)
       childrenRouterList.push(children)
       router.children = childrenRouterList
-    } else if (menu.parentId === '0') {
+    } else if (menu.parentId == 0) {
       router.meta = { 'title': menu.menuName, 'icon': menu.icon }
       router.path = '/inner'
       const childrenRouterList = []
@@ -107,7 +107,7 @@ function buildRouterTree(menus) {
       children.component = 'InnerLink'
       children.name = getRouterName(menu)
       children.meta = getComponentMeta(menu)
-      childrenRouterList.psuh(children)
+      childrenRouterList.push(children)
       router.children = childrenRouterList
     }
 

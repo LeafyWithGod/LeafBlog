@@ -34,6 +34,8 @@ public class LoginController {
         return adminLoginService.getInfo();
     }
 
+    @SystemLog(businessName ="获取用户菜单")
+    @ApiOperation(value = "获取用户菜单")
     @GetMapping("/getRouters")
     public ResponseResult getRouters(){
         return menuService.getListRouters();
